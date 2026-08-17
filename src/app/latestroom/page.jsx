@@ -8,7 +8,7 @@ const LatestRoom = async () => {
   const latestRooms = rooms.slice(0, 6);
 
   return (
-    <section className="py-8 px-4 sm:px-6 lg:px-8 bg-base-100">
+    <section className="py-6 px-4 sm:px-6 lg:px-8 bg-base-100">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 gap-4">
           <div>

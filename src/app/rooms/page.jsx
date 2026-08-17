@@ -44,7 +44,7 @@ const RoomsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-base-100 py-6 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-6">
           <h1 className="text-3xl font-bold tracking-tight text-base-content sm:text-4xl">
