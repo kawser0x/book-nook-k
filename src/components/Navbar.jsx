@@ -1,8 +1,32 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 import Theme from "./Theme";
-import { FaBookOpen } from "react-icons/fa";
+import {
+  FaBookOpen,
+  FaUser,
+  FaPlusCircle,
+  FaBookmark,
+  FaSignOutAlt,
+} from "react-icons/fa";
 
 const Navbar = () => {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+
+  const handleSignOut = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/signin");
+          router.refresh();
+        },
+      },
+    });
+  };
+
   const navLinks = (
     <>
       <li>
@@ -19,21 +43,39 @@ const Navbar = () => {
           Rooms
         </Link>
       </li>
-      {/* Show Sign In inside the drawer menu only on mobile */}
-      <li className="sm:hidden">
-        <Link
-          href="/signin"
-          className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary">
-          Sign In
-        </Link>
-      </li>
+      {session && (
+        <>
+          <li>
+            <Link
+              href="/add-room"
+              className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary active:bg-primary active:text-primary-content">
+              Add Room
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/my-booking"
+              className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary active:bg-primary active:text-primary-content">
+              My Bookings
+            </Link>
+          </li>
+        </>
+      )}
+      {!session && !isPending && (
+        <li className="sm:hidden">
+          <Link
+            href="/signin"
+            className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary">
+            Sign In
+          </Link>
+        </li>
+      )}
     </>
   );
 
   return (
     <div className="sticky top-0 z-50 border-b border-base-300 bg-base-100/90 backdrop-blur-md">
       <div className="navbar mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-       
         <div className="navbar-start gap-1">
           <div className="dropdown">
             <div
@@ -56,7 +98,7 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content z-[1] mt-3 w-48 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg">
+              className="menu menu-sm dropdown-content z-[1] mt-3 w-52 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg">
               {navLinks}
             </ul>
           </div>
@@ -75,17 +117,84 @@ const Navbar = () => {
           <ul className="menu menu-horizontal gap-1 px-1">{navLinks}</ul>
         </div>
 
-        <div className="navbar-end gap-1.5 sm:gap-2">
-          <Link
-            href="/signin"
-            className="btn btn-primary  btn-xs hidden font-medium  text-white    sm:inline-flex sm:btn-sm">
-            Sign In
-          </Link>
-          <Link
-            href="/signout"
-            className="btn btn-error btn-xs text-white shadow-sm hover:opacity-90 sm:btn-sm">
-            Sign Out
-          </Link>
+        <div className="navbar-end gap-2">
+          {isPending ? (
+            <span className="loading loading-spinner loading-xs text-primary" />
+          ) : session ? (
+            <div className="flex items-center gap-2">
+
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-sm flex items-center gap-2 px-2 hover:bg-base-200">
+                  <div className="avatar">
+                    <div className="w-7 h-7 rounded-full ring-1 ring-primary/30">
+                      {session.user?.image ? (
+                        <img
+                          src={session.user.image}
+                          alt={session.user.name || "User Avatar"}
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-primary text-xs font-semibold text-white">
+                          {session.user?.name?.charAt(0).toUpperCase() || (
+                            <FaUser className="h-3 w-3" />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <span className="hidden text-xs font-semibold text-base-content md:inline-block max-w-[120px] truncate">
+                    {session.user?.name || "User"}
+                  </span>
+                </div>
+
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content z-[1] mt-3 w-56 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg">
+                  <li className="menu-title px-3 py-1">
+                    <span className="text-xs font-semibold text-base-content">
+                      {session.user?.name}
+                    </span>
+                    <span className="text-[10px] font-normal text-base-content/60 truncate">
+                      {session.user?.email}
+                    </span>
+                  </li>
+                  <div className="divider my-1"></div>
+                  <li>
+                    <Link href="/add-room" className="flex items-center gap-2">
+                      <FaPlusCircle className="text-primary text-xs" /> Add Room
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/my-booking"
+                      className="flex items-center gap-2">
+                      <FaBookmark className="text-primary text-xs" /> My
+                      Bookings
+                    </Link>
+                  </li>
+                  <div className="divider my-1"></div>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="flex items-center gap-2 text-error hover:bg-error/10 active:bg-error/20">
+                      <FaSignOutAlt className="text-xs" /> Sign Out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <Link
+              href="/signin"
+              className="btn btn-primary btn-xs font-medium text-white sm:inline-flex sm:btn-sm">
+              Sign In
+            </Link>
+          )}
+
           <Theme />
         </div>
       </div>
