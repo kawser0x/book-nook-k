@@ -33,7 +33,7 @@ const Navbar = () => {
   return (
     <div className="sticky top-0 z-50 border-b border-base-300 bg-base-100/90 backdrop-blur-md">
       <div className="navbar mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        {/* Left: Mobile Drawer + Brand */}
+       
         <div className="navbar-start gap-1">
           <div className="dropdown">
             <div
