@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import Theme from "./Theme";
 import {
@@ -14,6 +14,7 @@ import {
 
 const Navbar = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: session, isPending } = authClient.useSession();
 
   const handleSignOut = async () => {
@@ -27,35 +28,34 @@ const Navbar = () => {
     });
   };
 
+  const getLinkClasses = (path) => {
+    const isActive = pathname === path;
+    return isActive
+      ? "bg-primary text-white font-semibold shadow-sm hover:bg-primary hover:text-white"
+      : "font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary";
+  };
+
   const navLinks = (
     <>
       <li>
-        <Link
-          href="/"
-          className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary active:bg-primary active:text-primary-content">
+        <Link href="/" className={getLinkClasses("/")}>
           Home
         </Link>
       </li>
       <li>
-        <Link
-          href="/rooms"
-          className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary active:bg-primary active:text-primary-content">
+        <Link href="/rooms" className={getLinkClasses("/rooms")}>
           Rooms
         </Link>
       </li>
       {session && (
         <>
           <li>
-            <Link
-              href="/add-room"
-              className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary active:bg-primary active:text-primary-content">
+            <Link href="/add-room" className={getLinkClasses("/add-room")}>
               Add Room
             </Link>
           </li>
           <li>
-            <Link
-              href="/my-booking"
-              className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary active:bg-primary active:text-primary-content">
+            <Link href="/my-booking" className={getLinkClasses("/my-booking")}>
               My Bookings
             </Link>
           </li>
@@ -63,9 +63,7 @@ const Navbar = () => {
       )}
       {!session && !isPending && (
         <li className="sm:hidden">
-          <Link
-            href="/signin"
-            className="font-medium text-base-content/80 transition-colors hover:bg-base-200 hover:text-primary">
+          <Link href="/signin" className={getLinkClasses("/signin")}>
             Sign In
           </Link>
         </li>
@@ -122,7 +120,6 @@ const Navbar = () => {
             <span className="loading loading-spinner loading-xs text-primary" />
           ) : session ? (
             <div className="flex items-center gap-2">
-
               <div className="dropdown dropdown-end">
                 <div
                   tabIndex={0}
@@ -163,14 +160,24 @@ const Navbar = () => {
                   </li>
                   <div className="divider my-1"></div>
                   <li>
-                    <Link href="/add-room" className="flex items-center gap-2">
+                    <Link
+                      href="/add-room"
+                      className={`flex items-center gap-2 ${
+                        pathname === "/add-room"
+                          ? "text-primary font-semibold"
+                          : ""
+                      }`}>
                       <FaPlusCircle className="text-primary text-xs" /> Add Room
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="/my-booking"
-                      className="flex items-center gap-2">
+                      className={`flex items-center gap-2 ${
+                        pathname === "/my-booking"
+                          ? "text-primary font-semibold"
+                          : ""
+                      }`}>
                       <FaBookmark className="text-primary text-xs" /> My
                       Bookings
                     </Link>
