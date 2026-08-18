@@ -9,6 +9,7 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import DeleteRoomButton from "@/components/DeleteRoomButton";
+import EditRoomDetails from "@/components/EditRoomDetails";
 
 const RoomDetails = async ({ params }) => {
   const { id } = await params;
@@ -50,12 +51,6 @@ const RoomDetails = async ({ params }) => {
             href="/rooms"
             className="inline-flex items-center gap-2 text-sm font-medium text-base-content/70 hover:text-primary transition-colors">
             <FaArrowLeft className="h-3 w-3" /> Back to Rooms
-          </Link>
-
-          <Link
-            href={`/rooms/${id}/edit`}
-            className="btn btn-outline btn-sm gap-2 hover:bg-primary hover:text-white">
-            <FaEdit className="h-3.5 w-3.5" /> Edit Room
           </Link>
         </div>
 
@@ -165,11 +160,7 @@ const RoomDetails = async ({ params }) => {
                 </Link>
 
                 <div className="grid grid-cols-1 space-y-2">
-                  <Link
-                    href={`/rooms/${id}/edit`}
-                    className="btn btn-neutral w-full gap-1.5">
-                    <FaEdit className="h-3 w-3" /> Edit
-                  </Link>
+                  <EditRoomDetails id={id} initialData={room} />
                   <DeleteRoomButton id={id} roomName={name} />
                 </div>
 
