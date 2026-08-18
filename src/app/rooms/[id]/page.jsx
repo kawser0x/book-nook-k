@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import DeleteRoomButton from "@/components/DeleteRoomButton";
 import EditRoomDetails from "@/components/EditRoomDetails";
+import { BsBookmarkPlusFill } from "react-icons/bs";
 
 const RoomDetails = async ({ params }) => {
   const { id } = await params;
@@ -154,15 +155,14 @@ const RoomDetails = async ({ params }) => {
 
               <div className="space-y-2.5 pt-2">
                 <Link
-                  href={`/rooms/${id}/book`}
-                  className="btn btn-primary w-full text-white shadow-md shadow-primary/20 hover:brightness-105">
+                  href={`/book-room/${id}`}
+                  className="btn btn-outline btn-primary w-full  shadow-md shadow-primary/20 hover:brightness-105">
+                  <BsBookmarkPlusFill />
                   Book Now
                 </Link>
 
-                <div className="grid grid-cols-1 space-y-2">
-                  <EditRoomDetails id={id} initialData={room} />
-                  <DeleteRoomButton id={id} roomName={name} />
-                </div>
+                <EditRoomDetails id={id} initialData={room} />
+                <DeleteRoomButton id={id} roomName={name} />
 
                 <p className="text-center text-[11px] text-base-content/60">
                   Free cancellation up to 1 hour before reservation

@@ -55,8 +55,7 @@ const EditRoomDetails = ({ id, initialData }) => {
         .filter((item) => item.length > 0),
     };
 
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     const res = await fetch(`${baseUrl}/rooms/${id}`, {
       method: "PATCH",
@@ -80,7 +79,7 @@ const EditRoomDetails = ({ id, initialData }) => {
       <button
         type="button"
         onClick={openModal}
-        className="btn btn-neutral w-full gap-1.5">
+        className="btn btn-outline btn-accent w-full gap-1.5">
         <FaEdit className="h-3.5 w-3.5" /> Edit
       </button>
 
@@ -99,7 +98,6 @@ const EditRoomDetails = ({ id, initialData }) => {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
-       
             <div className="form-control">
               <label className="label py-1">
                 <span className="label-text text-xs font-bold">Room Name</span>

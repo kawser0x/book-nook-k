@@ -66,7 +66,7 @@ export default function DeleteRoomButton({ id, roomName }) {
           <p className="py-4 text-sm text-base-content/70">
             Are you sure you want to delete{" "}
             <strong className="text-base-content">
-              "{roomName || "this room"}"
+              {roomName || "this room"}
             </strong>
             ? This action cannot be undone and will remove all associated
             booking slots.
